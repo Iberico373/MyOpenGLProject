@@ -1,0 +1,2 @@
+C:\Users\Admin\Documents\GitHub\MyOpenGLProject\x64\Debug\MyOpenGLProject.exe
+C:\Users\Admin\Documents\GitHub\MyOpenGLProject\MyOpenGLProject\x64\Debug\MyOpenGLProject.exe
