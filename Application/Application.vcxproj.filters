@@ -80,5 +80,8 @@
     <ClInclude Include="AppOptions.h">
       <Filter>Options</Filter>
     </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

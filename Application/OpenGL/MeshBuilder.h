@@ -8,6 +8,7 @@
 
 #include<GLAD/gl.h>
 #include"Vertex.h"
+#include"ShaderManager.h"
 
 #include<iostream>
 #include <vector>
@@ -34,17 +35,18 @@ private:
 
 
 public:
-
 	Sprite(const char imagePath[], glm::vec4 color)
 	{
 		glGenBuffers(1, &vertexBuffer);
 		glGenBuffers(1, &indexBuffer);
 		int width, height, nrChannels;
 		unsigned char* data = stbi_load(imagePath, &width, &height, &nrChannels, 0);
+
 		if (data == NULL)
 		{
 			data = stbi_load(imagePath, &width, &height, &nrChannels, 0);
 		}
+
 		glGenTextures(1, &texture);
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -53,6 +55,7 @@ public:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
+
 		stbi_image_free(data);
 
 		float fWidth = 1.f;
@@ -110,9 +113,8 @@ public:
 
 	void Render()
 	{
-		//should put this in a text file and read from it instead of hardcoding
-		// Activate the shader
-		const char* vertex_shader =
+		// Shader program
+		const char* vertexShader =
 			"#version 330 core\n"
 			"layout(location = 0) in vec3 aPos;"
 			"layout(location = 1) in vec4 aColor;"
@@ -130,7 +132,7 @@ public:
 			"TexCoord = aTexCoord;"
 			"}";
 
-		const char* fragment_shader =
+		const char* fragmentShader =
 			"#version 330 core\n"
 			"out vec4 FragColor;"
 
@@ -145,30 +147,19 @@ public:
 			"FragColor *= runtimeColor;"
 			"}";
 
-		GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-		glShaderSource(vs, 1, &vertex_shader, NULL);
-		glCompileShader(vs);
-		GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-		glShaderSource(fs, 1, &fragment_shader, NULL);
-		glCompileShader(fs);
-
-		GLuint shader_programme = glCreateProgram();
-		glAttachShader(shader_programme, fs);
-		glAttachShader(shader_programme, vs);
-		glLinkProgram(shader_programme);
-		glUseProgram(shader_programme);
-		glDeleteShader(vs);
-		glDeleteShader(fs);
+		// Give a unique identifier for the shader to be referenced
+		GLuint shaderProgram = ShaderManager::CreateShader(vertexShader, fragmentShader);
+		glUseProgram(shaderProgram);
 
 		glm::mat4 transform;
-		unsigned int transformLoc = glGetUniformLocation(shader_programme, "transform");
-		unsigned int colorLoc = glGetUniformLocation(shader_programme, "runtimeColor");
+		unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
+		unsigned int colorLoc = glGetUniformLocation(shaderProgram, "runtimeColor");
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
-		transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-		transform = glm::translate(transform, glm::vec3(0.f,
-			0.f,
-			0.0f));
+		// Make sure to initialize matrix to identity matrix first
+		transform = glm::mat4(1.0f); 
+		transform = glm::translate(transform, glm::vec3(0.f, 0.f, 0.0f));
+
 		// Update the shaders with the latest transform
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 		glUniform4fv(colorLoc, 1, glm::value_ptr(color));
