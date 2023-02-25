@@ -19,30 +19,30 @@ void error_callback(int error, const char* description)
 
 bool Application::Init()
 {
-	//set error callback
+	// Set error callback
 	glfwSetErrorCallback(error_callback);
 
-	//init glfw
+	// Init glfw
 	if (!glfwInit())
 	{
-		//Initialization failed
+		// Initialization failed
 		return false;
 	}
 
 
-	//create the window
+	// Create the window
 	window = glfwCreateWindow(width, height, "My Title", NULL, NULL);
 	if (!window)
 	{
-		//Window or OpenGL context creation failed
+		// Window or OpenGL context creation failed
 		return false;
 	}
 	glfwSetWindowUserPointer(window, reinterpret_cast<void*>(this));
 
-	//make window current context
+	// Make window current context
 	glfwMakeContextCurrent(window);
 
-	//load opengl with glad
+	// Load opengl with glad
 	gladLoadGL(glfwGetProcAddress);
 
 	int width, height;
@@ -57,7 +57,6 @@ bool Application::Init()
 
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsClassic();
 
 	// Setup Platform/Renderer bindings
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -76,12 +75,11 @@ void Application::Run()
 
 	Sprite sprite("Images/Untitled.png", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	//the game loop
+	// Main game loop
 	while (!glfwWindowShouldClose(window))
 	{
-		//set now to chrono::steady_clock::now()
 		now = chrono::steady_clock::now();
-		//we minus the now and lastUpdate to get the deltaTime
+		// Get deltaTime by getting the difference of time between the current frame and the previous frame
 		deltaTime = chrono::duration_cast<std::chrono::microseconds>(now - lastUpdate).count() / 1000000.0; // divide by 1000000.0 to make deltaTime in seconds
 
 		// Start the Dear ImGui frame
@@ -115,23 +113,25 @@ void Application::Run()
 				ImGui::ShowDemoWindow();
 		}
 
-		//clear the screen and buffer
+		// Clear the screen and buffer
 		glClearColor(0.2f, 0.f, 0.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//rendering
+		// Rendering
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		sprite.Render();
 
-		//put the stuff we've been drawing onto the display
+		// Put the stuff we've been drawing onto the display
 		glfwSwapBuffers(window);
 
-		//update other events like input handling 
+		// Update other events like input handling 
 		glfwPollEvents();
 
-		lastUpdate = now; //save the previous chrono::steady_clock::now() value
+		// Save the previous chrono::steady_clock::now() value
+		lastUpdate = now; 
 	}
+
 	return;
 }
 

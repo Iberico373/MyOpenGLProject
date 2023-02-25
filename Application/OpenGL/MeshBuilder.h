@@ -25,13 +25,15 @@ struct Transform
 struct Sprite
 {
 private:
-	// positions          
+	// Positions          
 	unsigned int vertexBuffer;
 	unsigned int indexBuffer;
 	unsigned int indexSize;
 	unsigned int texture;
 	GLuint vao = 0;
 	glm::vec4 color;
+	//Get both shader code from Basic.shader
+	ShaderProgramSource source = ShaderManager::ParseShader("Resources/Shaders/Basic.shader");
 
 
 public:
@@ -113,42 +115,13 @@ public:
 
 	void Render()
 	{
-		// Shader program
-		const char* vertexShader =
-			"#version 330 core\n"
-			"layout(location = 0) in vec3 aPos;"
-			"layout(location = 1) in vec4 aColor;"
-			"layout(location = 2) in vec2 aTexCoord;"
-
-			"out vec2 TexCoord;"
-			"out vec4 Color;"
-
-			"uniform mat4 transform;"
-
-			"void main()"
-			"{"
-			"gl_Position = transform * vec4(aPos, 1.0);"
-			"Color = aColor;"
-			"TexCoord = aTexCoord;"
-			"}";
-
-		const char* fragmentShader =
-			"#version 330 core\n"
-			"out vec4 FragColor;"
-
-			"in vec2 TexCoord;"
-
-			"// texture samplers\n"
-			"uniform sampler2D imageTexture;"
-			"uniform vec4 runtimeColor;"
-
-			"void main(){"
-			"FragColor = texture(imageTexture, TexCoord);"
-			"FragColor *= runtimeColor;"
-			"}";
+		std::cout << "VERTEX SHADER" << std::endl;
+		std::cout << source.VertexSource << std::endl;
+		std::cout << "FRAGMENT SHADER" << std::endl;
+		std::cout << source.FragmentSource << std::endl;
 
 		// Give a unique identifier for the shader to be referenced
-		GLuint shaderProgram = ShaderManager::CreateShader(vertexShader, fragmentShader);
+		GLuint shaderProgram = ShaderManager::CreateShader(source.VertexSource, source.FragmentSource);
 		glUseProgram(shaderProgram);
 
 		glm::mat4 transform;
