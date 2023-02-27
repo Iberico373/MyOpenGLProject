@@ -31,7 +31,7 @@ bool Application::Init()
 
 
 	// Create the window
-	window = glfwCreateWindow(width, height, "My Title", NULL, NULL);
+	window = glfwCreateWindow(width, height, "MyOpenGLProject", NULL, NULL);
 	if (!window)
 	{
 		// Window or OpenGL context creation failed
@@ -73,7 +73,7 @@ void Application::Run()
 	chrono::steady_clock::time_point lastUpdate = chrono::steady_clock::now();
 	chrono::steady_clock::time_point now = chrono::steady_clock::now();
 
-	Sprite sprite("Images/Untitled.png", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	Sprite sprite("Images/Default.jpg", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	// Main game loop
 	while (!glfwWindowShouldClose(window))

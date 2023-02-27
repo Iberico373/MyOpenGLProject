@@ -6,12 +6,13 @@
 #include <gtc/type_ptr.hpp>
 #include <stb_image.h>
 
-#include<GLAD/gl.h>
-#include"Vertex.h"
-#include"ShaderManager.h"
+#include <GLAD/gl.h>
+#include "Vertex.h"
+#include "ShaderManager.h"
 
-#include<iostream>
+#include <iostream>
 #include <vector>
+#include <chrono>
 
 #include "../AppOptions.h"
 
@@ -34,6 +35,12 @@ private:
 	glm::vec4 color;
 	//Get both shader code from Basic.shader
 	ShaderProgramSource source = ShaderManager::ParseShader("Resources/Shaders/Basic.shader");
+
+	float angle = 0.0f;
+	
+	double deltaTime;
+	std::chrono::steady_clock::time_point lastUpdate = std::chrono::steady_clock::now();
+	std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
 
 
 public:
@@ -66,32 +73,99 @@ public:
 		std::vector<Vertex> vertex_buffer_data;
 		std::vector<GLuint> index_buffer_data;
 
-		v.position = glm::vec3(-0.5f * fWidth, -0.5f * fHeight, 0);
+		// Init vertices and append to vertex buffer
+
+		// Front vertices
+		v.position = glm::vec3(-0.5f * fWidth, -0.5f * fHeight, 0); // Multiplied with fWidth and fHeight to scale with window
 		v.color = color;
 		v.texCoord = glm::vec2(0.0f, 1.0f);
-		vertex_buffer_data.push_back(v);
+		vertex_buffer_data.push_back(v); // Bottom-left (0)
 
 		v.position = glm::vec3(0.5f * fWidth, -0.5f * fHeight, 0);
 		v.color = color;
 		v.texCoord = glm::vec2(1.0f, 1.0f);
-		vertex_buffer_data.push_back(v);
+		vertex_buffer_data.push_back(v); // Bottom-right (1)
 
 		v.position = glm::vec3(0.5f * fWidth, 0.5f * fHeight, 0);
 		v.color = color;
 		v.texCoord = glm::vec2(1.0f, 0.0f);
-		vertex_buffer_data.push_back(v);
+		vertex_buffer_data.push_back(v); // Top-right (2)
 
 		v.position = glm::vec3(-0.5f * fWidth, 0.5f * fHeight, 0);
 		v.color = color;
 		v.texCoord = glm::vec2(0, 0);
-		vertex_buffer_data.push_back(v);
+		vertex_buffer_data.push_back(v); // Top-left (3)
 
+		// Back vertices
+		v.position = glm::vec3(-0.5f * fWidth, -0.5f * fHeight, -1); 
+		v.color = color;
+		v.texCoord = glm::vec2(0.0f, 1.0f);
+		vertex_buffer_data.push_back(v); // Bottom-left (4)
+
+		v.position = glm::vec3(0.5f * fWidth, -0.5f * fHeight, -1);
+		v.color = color;
+		v.texCoord = glm::vec2(1.0f, 1.0f);
+		vertex_buffer_data.push_back(v); // Bottom-right (5)
+
+		v.position = glm::vec3(0.5f * fWidth, 0.5f * fHeight, -1);
+		v.color = color;
+		v.texCoord = glm::vec2(1.0f, 0.0f);
+		vertex_buffer_data.push_back(v); // Top-right (6)
+
+		v.position = glm::vec3(-0.5f * fWidth, 0.5f * fHeight, -1);
+		v.color = color;
+		v.texCoord = glm::vec2(0, 0);
+		vertex_buffer_data.push_back(v); // Top-left (7)
+
+		// Init indexes to be appended to the index buffer
+		
+		//Front face
 		index_buffer_data.push_back(3);
 		index_buffer_data.push_back(0);
 		index_buffer_data.push_back(2);
 		index_buffer_data.push_back(1);
 		index_buffer_data.push_back(2);
 		index_buffer_data.push_back(0);
+
+		//Side face 1
+		index_buffer_data.push_back(2);
+		index_buffer_data.push_back(5);
+		index_buffer_data.push_back(1);
+		index_buffer_data.push_back(6);
+		index_buffer_data.push_back(2);
+		index_buffer_data.push_back(5);
+
+		//Side face 2
+		index_buffer_data.push_back(3);
+		index_buffer_data.push_back(7);
+		index_buffer_data.push_back(0);
+		index_buffer_data.push_back(7);
+		index_buffer_data.push_back(4);
+		index_buffer_data.push_back(0);
+
+		//Back face
+		index_buffer_data.push_back(7);
+		index_buffer_data.push_back(4);
+		index_buffer_data.push_back(6);
+		index_buffer_data.push_back(5);
+		index_buffer_data.push_back(6);
+		index_buffer_data.push_back(4);
+
+		//Top face
+		index_buffer_data.push_back(3);
+		index_buffer_data.push_back(6);
+		index_buffer_data.push_back(2);
+		index_buffer_data.push_back(7);
+		index_buffer_data.push_back(3);
+		index_buffer_data.push_back(2);
+
+		//Bottom face
+		index_buffer_data.push_back(0);
+		index_buffer_data.push_back(5);
+		index_buffer_data.push_back(1);
+		index_buffer_data.push_back(4);
+		index_buffer_data.push_back(0);
+		index_buffer_data.push_back(5);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 		glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
@@ -133,6 +207,13 @@ public:
 		transform = glm::mat4(1.0f); 
 		transform = glm::translate(transform, glm::vec3(0.f, 0.f, 0.0f));
 
+		// Calculate delta time
+		now = std::chrono::steady_clock::now();
+		deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(now - lastUpdate).count() / 1000000.0;
+		angle += deltaTime * 10;
+
+		transform = glm::rotate(transform, float(glm::radians(angle)), glm::vec3(1, 0, 0));
+
 		// Update the shaders with the latest transform
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 		glUniform4fv(colorLoc, 1, glm::value_ptr(color));
@@ -157,5 +238,7 @@ public:
 		glDisableVertexAttribArray(2);
 		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(0);
+
+		lastUpdate = now;
 	};
 };
