@@ -1,5 +1,5 @@
 ﻿  Application.cpp
-C:\Users\julia\Desktop\GitHub Thingies\MyOpenGLProject\Application\OpenGL\MeshBuilder.h(175,1): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
-C:\Users\julia\Desktop\GitHub Thingies\MyOpenGLProject\Application\OpenGL\MeshBuilder.h(213,22): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  Application.vcxproj -> C:\Users\julia\Desktop\GitHub Thingies\MyOpenGLProject\x64\Debug\Application.exe
+C:\Users\Admin\Documents\GitHub\MyOpenGLProject\Application\Source\OpenGL\MeshBuilder.h(156,1): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+C:\Users\Admin\Documents\GitHub\MyOpenGLProject\Application\Source\Application.cpp(13,76): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\Admin\Documents\GitHub\MyOpenGLProject\Application\Source\Application.cpp(124,22): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Application.vcxproj -> C:\Users\Admin\Documents\GitHub\MyOpenGLProject\x64\Debug\Application.exe

@@ -24,10 +24,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application.cpp">
+    <ClCompile Include="Source\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\GLAD\src\gl.c">
@@ -54,9 +54,12 @@
     <ClCompile Include="ImGui\imgui_demo.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application.h">
+    <ClInclude Include="Source\Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imconfig.h">
@@ -71,16 +74,19 @@
     <ClInclude Include="ImGui\backends\imgui_impl_opengl3.h">
       <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="OpenGL\Vertex.h">
+    <ClInclude Include="Source\OpenGL\Vertex.h">
       <Filter>OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="OpenGL\MeshBuilder.h">
+    <ClInclude Include="Source\OpenGL\MeshBuilder.h">
       <Filter>OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="AppOptions.h">
+    <ClInclude Include="Source\AppOptions.h">
       <Filter>Options</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderManager.h">
+    <ClInclude Include="Source\ShaderManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
