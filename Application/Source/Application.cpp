@@ -30,6 +30,8 @@ bool Application::Init()
 		return false;
 	}
 
+	// Enable anti-aliasing
+	glfwWindowHint(GLFW_SAMPLES, 16);
 
 	// Create the window
 	window = glfwCreateWindow(width, height, "MyOpenGLProject", NULL, NULL);
@@ -64,6 +66,11 @@ bool Application::Init()
 	const char* glsl_version = "#version 330";
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+
+	glDepthFunc(GL_LESS);
+
 	return true;
 }
 
@@ -74,7 +81,7 @@ void Application::Run()
 	chrono::steady_clock::time_point lastUpdate = chrono::steady_clock::now();
 	chrono::steady_clock::time_point now = chrono::steady_clock::now();
 
-	Sprite sprite("Images/Untitled.png", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	Sprite sprite("Images/stone_texture.jpg", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	// Main game loop
 	while (!glfwWindowShouldClose(window))
@@ -116,7 +123,7 @@ void Application::Run()
 
 		// Clear the screen and buffer
 		glClearColor(0.2f, 0.f, 0.f, 1.f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Rendering
 		ImGui::Render();

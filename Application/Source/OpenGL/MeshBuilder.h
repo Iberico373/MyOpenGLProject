@@ -69,7 +69,7 @@ public:
 		std::vector<GLuint> index_buffer_data;
 
 		// Init vertices and append to vertex buffer
-		//Front Vertices
+		// Front Vertices
 		v.position = glm::vec3(-0.5f, -0.5f, -0.5f);
 		v.color = color;
 		v.texCoord = glm::vec2(0.0f, 1.0f);
@@ -90,7 +90,7 @@ public:
 		v.texCoord = glm::vec2(0, 0);
 		vertex_buffer_data.push_back(v);
 
-		//Back Vertices
+		// Back Vertices
 		v.position = glm::vec3(-0.5f, -0.5f, 0.5f);
 		v.color = color;
 		v.texCoord = glm::vec2(0.0f, 1.0f);
